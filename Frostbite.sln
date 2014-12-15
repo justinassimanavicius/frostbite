@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frostbite.Web", "Frostbite.Web\Frostbite.Web.csproj", "{3C3C46AA-BDE0-4F21-9414-62F3B1383AD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frostbite.Engine", "Frostbite.Engine\Frostbite.Engine.csproj", "{5C563BD4-48EE-471B-ACEE-6FD2F68DFA19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frostbite.GameHost", "Frostbite.GameHost\Frostbite.GameHost.csproj", "{6A9591D2-6889-465F-AD26-87FAE5C47C83}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C3C46AA-BDE0-4F21-9414-62F3B1383AD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C3C46AA-BDE0-4F21-9414-62F3B1383AD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C3C46AA-BDE0-4F21-9414-62F3B1383AD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C3C46AA-BDE0-4F21-9414-62F3B1383AD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C563BD4-48EE-471B-ACEE-6FD2F68DFA19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C563BD4-48EE-471B-ACEE-6FD2F68DFA19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C563BD4-48EE-471B-ACEE-6FD2F68DFA19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C563BD4-48EE-471B-ACEE-6FD2F68DFA19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A9591D2-6889-465F-AD26-87FAE5C47C83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A9591D2-6889-465F-AD26-87FAE5C47C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A9591D2-6889-465F-AD26-87FAE5C47C83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A9591D2-6889-465F-AD26-87FAE5C47C83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
