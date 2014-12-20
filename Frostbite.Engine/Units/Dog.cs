@@ -8,14 +8,8 @@ namespace Frostbite.Engine.Units
 {
     class Dog:Unit
     {
-        public override int BaseAttack
+        public Dog() : base(1, 1)
         {
-            get { return 1; }
-        }
-
-        public override int BaseHealth
-        {
-            get { return 1; }
         }
     }
 }

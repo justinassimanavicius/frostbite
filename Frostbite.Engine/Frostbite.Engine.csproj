@@ -39,7 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cards\Summon\AttackCard.cs" />
     <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\AttackCommand.cs" />
     <Compile Include="Commands\SummonCommand.cs" />
     <Compile Include="Cards\Summon\DogCard.cs" />
     <Compile Include="Exceptions\GameplayException.cs" />

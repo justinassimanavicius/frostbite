@@ -8,9 +8,10 @@ namespace Frostbite.Engine.Heroes
 {
     public class AverageJoe : Hero
     {
-        public override int BaseHealth
+       
+        public AverageJoe() : base(10)
         {
-            get { return 10;  }
         }
+
     }
 }

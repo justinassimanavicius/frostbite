@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Frostbite.Engine.Exceptions;
@@ -63,13 +64,26 @@ namespace Frostbite.Engine.Gameplay
             StartCurrentPlayersTurn();
         }
 
-        public void PlayCard(int playerId, int cardId)
+        public void PlayCard(int playerId, int cardId, IEnumerable<CardTarget> cardTargets)
         {
             var currentPlayer = GetCurrentPlayer();
 
             if (currentPlayer.Id != playerId) throw new GameplayException("Not this player's turn");
 
-            currentPlayer.PlayCard(cardId);
+            var targets = GetTargets(cardTargets);
+
+            currentPlayer.PlayCard(cardId, targets.ToArray());
+        }
+
+        private IEnumerable<ITarget> GetTargets(IEnumerable<CardTarget> cardTargets)
+        {
+            if (cardTargets == null) return Enumerable.Empty<ITarget>();
+            return cardTargets.Select(x => x.GetTarget(_players));
+        }
+
+        private Player GetOpponent()
+        {
+            return _players[(_currentPlayerIndex + 1)%2];
         }
 
         public void EndTurn(int playerId)
@@ -90,8 +104,7 @@ namespace Frostbite.Engine.Gameplay
             _turn++;
             OnPlayerTurn();
 
-            Player currentPlayer;
-            currentPlayer = GetCurrentPlayer();
+            Player currentPlayer = GetCurrentPlayer();
             currentPlayer.DrawCards(1);
             currentPlayer.SetMaxMana(GetMaxManaForThisTurn());
             currentPlayer.ReplenishMana();
@@ -107,6 +120,8 @@ namespace Frostbite.Engine.Gameplay
             return _players[_currentPlayerIndex];
         }
 
+
+        #region events 
         public event PlayerTurnEventHandler PlayerTurn;
 
 
@@ -169,6 +184,35 @@ namespace Frostbite.Engine.Gameplay
                 };
                 ManaChange(this, e);
             }
+        }
+
+        #endregion
+    }
+
+    public class CardTarget
+    {
+        private readonly int _playerId;
+        private readonly int _targetId;
+
+        public CardTarget(int playerId, int targetId)
+        {
+            _playerId = playerId;
+            _targetId = targetId;
+        }
+
+        public ITarget GetTarget(IEnumerable<Player> players)
+        {
+            var player = players.First(x => x.Id == _playerId);
+            var hero = player.GetHero();
+            if (hero.Id == _targetId)
+            {
+                return hero;
+            }
+            var unit = player.GetUnits().FirstOrDefault(x => x.Id == _targetId);
+
+            if(unit == null) throw new GameplayException("Nonexisting element (unit, hero etc.) was targeted during players action");
+
+            return unit;
         }
     }
 

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Frostbite.Engine.Commands;
+using Frostbite.Engine.Exceptions;
 using Frostbite.Engine.Gameplay;
 using Frostbite.Engine.Units;
 
 namespace Frostbite.Engine.Cards.Summon
 {
-    public class DogCard:Card
+    public class AttackCard:Card
     {
 
         
@@ -20,17 +21,21 @@ namespace Frostbite.Engine.Cards.Summon
 
         public override bool RequiresTarget
         {
-            get { return false; }
+            get { return true; }
         }
 
         public override void Play(Player player, IList<ITarget> targets)
         {
-            new SummonCommand(new Dog(), player).Execute();
+            if (targets == null || !targets.Any()) throw new GameplayException("This card requires target");
+
+            var target = targets.First() as IAttackTarget;
+
+            new AttackCommand(target, 1).Execute();
         }
 
         public override string ToString()
         {
-            return "Dog card " + Id;
+            return "Attack card " + Id;
         }
     }
 }

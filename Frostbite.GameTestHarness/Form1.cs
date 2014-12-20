@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Frostbite.Engine.Cards.Summon;
 using Frostbite.Engine.Gameplay;
 using Frostbite.Engine.Heroes;
+using Frostbite.Engine.Units;
 
 namespace Frostbite.GameTestHarness
 {
@@ -30,6 +31,8 @@ namespace Frostbite.GameTestHarness
             _player1 = new Player(new List<Card>
             {
                 new DogCard(),
+                new AttackCard(),
+                new DogCard(),
                 new DogCard(),
                 new DogCard(),
                 new DogCard(),
@@ -40,6 +43,9 @@ namespace Frostbite.GameTestHarness
                 new DogCard(),
                 new DogCard(),
                 new DogCard(),
+                new AttackCard(),
+                new AttackCard(),
+                new AttackCard(),
                 new DogCard(),
                 new DogCard()
             }, new AverageJoe());
@@ -82,6 +88,7 @@ namespace Frostbite.GameTestHarness
             }
             listBox.DataSource = null;
             listBox.DataSource = unitChangeEventArgs.Units;
+            listBox.SelectedIndex = -1;
         }
 
         private void GameOnHandChange(object sender, HandChangeEventArgs handChangeEventArgs)
@@ -117,7 +124,23 @@ namespace Frostbite.GameTestHarness
             var card = (Card) comboBox1.SelectedItem;
             if (card != null)
             {
-                _game.PlayCard(_currentPlayerId, card.Id);
+                var cardTargets = new List<CardTarget>();
+                if (card.RequiresTarget)
+                {
+                    var selectedUnit = Player1UnitsListBox.SelectedItem as Unit;
+                    if (selectedUnit != null)
+                    {
+                        cardTargets.Add(new CardTarget(_player1.Id, selectedUnit.Id));
+                    }
+
+                    selectedUnit = Player2UnitsListBox.SelectedItem as Unit;
+                    if (selectedUnit != null)
+                    {
+                        cardTargets.Add(new CardTarget(_player2.Id, selectedUnit.Id));
+                    }
+                    
+                }
+                _game.PlayCard(_currentPlayerId, card.Id, cardTargets);
             }
         }
 

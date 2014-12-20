@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Frostbite.Engine.Cards.Summon;
@@ -45,6 +46,26 @@ namespace Frostbite.Engine.Gameplay
 
         }
 
+        public void AddMana(int manaToAdd)
+        {
+            if (manaToAdd != 0)
+            {
+                var newMana =_manaLeft + manaToAdd;
+                if (newMana > _maxMana)
+                {
+                    newMana = _maxMana;
+                }
+                else if(newMana < 0)
+                {
+                    newMana = 0;
+                }
+
+                _manaLeft = newMana;
+
+                OnManaChange();
+            }
+        }
+
         public void SetMaxMana(int maxMana)
         {
             if (maxMana != _maxMana)
@@ -84,19 +105,19 @@ namespace Frostbite.Engine.Gameplay
 
 
 
-        public void PlayCard(int cardId)
+        public void PlayCard(int cardId, IList<ITarget> targets)
         {
             var cardToPlay = Hand.FirstOrDefault(x => x.Id == cardId);
 
             if(cardToPlay == null) throw new GameplayException("Card not found in player's hand");
+
             if(cardToPlay.ManaCost > _manaLeft) throw new GameplayException("Card requires more mana than player currently has");
 
             Hand.Remove(cardToPlay);
 
-            _manaLeft -= cardToPlay.ManaCost;
-            OnManaChange();
+            AddMana(-cardToPlay.ManaCost);
 
-            cardToPlay.Play(this);
+            cardToPlay.Play(this, targets);
 
             Discards.Add(cardToPlay);
 
@@ -119,6 +140,8 @@ namespace Frostbite.Engine.Gameplay
         {
             return Units;
         }
+
+        #region events
 
         public delegate void HandChangeEventHandler(object sender, EventArgs e);
         public event HandChangeEventHandler HandChange;
@@ -152,5 +175,31 @@ namespace Frostbite.Engine.Gameplay
                 ManaChange(this, null);
             }
         }
+
+        #endregion
+
+        public Hero GetHero()
+        {
+            return _hero;
+        }
+    }
+
+    public interface ITarget
+    {
+    }
+
+    public interface IAttackTarget
+    {
+        AttackResult ReactToAttack(AttackRequest attackRequest);
+    }
+
+    public class AttackRequest
+    {
+        public int AttackAmount { get; set; }
+    }
+
+    public class AttackResult
+    {
+        public int DamageDealt { get; set; }
     }
 }
