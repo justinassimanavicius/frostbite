@@ -12,10 +12,7 @@ namespace Frostbite.Engine.Cards.Summon
     public class DogCard:Card
     {
 
-        public DogCard()
-        {
-            Id = new Random().Next();
-        }
+        
         public override int ManaCost
         {
             get { return 1; }

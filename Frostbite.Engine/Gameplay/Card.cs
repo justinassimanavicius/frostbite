@@ -10,7 +10,11 @@ namespace Frostbite.Engine.Gameplay
     public abstract class Card
     {
         public abstract int ManaCost { get;}
-        public int Id { get; set; }
+
+        public int Id
+        {
+            get { return GetHashCode(); }
+        }
 
         public abstract void Play(Player player);
     }

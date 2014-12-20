@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Frostbite.Engine.Exceptions;
+using Frostbite.Engine.Gameplay;
 using Frostbite.Engine.Units;
 
 namespace Frostbite.Engine.Gameplay
@@ -13,12 +14,23 @@ namespace Frostbite.Engine.Gameplay
         private readonly List<Player> _players;
 
         public delegate void PlayerTurnEventHandler(object sender, PlayerTurnEventArgs e);
+        public delegate void HandChangeEventHandler(object sender, HandChangeEventArgs e);
 
         private int _currentPlayerIndex;
 
         public Game(IEnumerable<Player> players)
         {
             _players = players.ToList();
+            foreach (var player in _players)
+            {
+                player.HandChange += PlayerOnHandChange;
+            }
+        }
+
+        private void PlayerOnHandChange(object sender, EventArgs eventArgs)
+        {
+            var player = (Player) sender;
+            OnHandChange(player);
         }
 
         public void Start()
@@ -47,6 +59,10 @@ namespace Frostbite.Engine.Gameplay
             _currentPlayerIndex = (_currentPlayerIndex + 1)%2;
 
             OnPlayerTurn();
+
+            currentPlayer = GetCurrentPlayer();
+            currentPlayer.DrawCards(1);
+
         }
 
         private Player GetCurrentPlayer()
@@ -55,12 +71,13 @@ namespace Frostbite.Engine.Gameplay
         }
 
         public event PlayerTurnEventHandler PlayerTurn;
+        
 
         protected virtual void OnPlayerTurn()
         {
             if (PlayerTurn != null)
             {
-                Player currentPlayer = GetCurrentPlayer();
+                var currentPlayer = GetCurrentPlayer();
                 var e = new PlayerTurnEventArgs
                 {
                     PlayerId = currentPlayer.Id,
@@ -71,13 +88,31 @@ namespace Frostbite.Engine.Gameplay
             }
         }
 
+        public event HandChangeEventHandler HandChange;
 
+        protected virtual void OnHandChange(Player player)
+        {
+            var currentPlayer = GetCurrentPlayer();
+            var e = new HandChangeEventArgs
+            {
+                PlayerId = currentPlayer.Id,
+                Hand = currentPlayer.GetHand(),
+            };
+            HandChange(this, e);
+        }
     }
+    
 
     public class PlayerTurnEventArgs:EventArgs
     {
         public int PlayerId { get; set; }
         public List<Card> Hand { get; set; }
         public List<Unit> Units { get; set; }
+    }
+
+    public class HandChangeEventArgs : EventArgs
+    {
+        public int PlayerId { get; set; }
+        public List<Card> Hand { get; set; }
     }
 }

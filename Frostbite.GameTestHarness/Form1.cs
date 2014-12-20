@@ -32,7 +32,6 @@ namespace Frostbite.GameTestHarness
                 new DogCard(),
                 new DogCard()
             });
-            player1.Id = 1;
             var player2 = new Player(new List<Card>
             {
                 new DogCard(),
@@ -41,10 +40,19 @@ namespace Frostbite.GameTestHarness
                 new DogCard(),
                 new DogCard()
             });
-            player2.Id = 2;
             _game = new Game(new List<Player>{player1, player2});
             _game.PlayerTurn += game_PlayerTurn;
+            _game.HandChange += GameOnHandChange;
             _game.Start();
+        }
+
+        private void GameOnHandChange(object sender, HandChangeEventArgs handChangeEventArgs)
+        {
+            if (handChangeEventArgs.PlayerId == _currentPlayerId)
+            {
+                comboBox1.DataSource = null;
+                comboBox1.DataSource = handChangeEventArgs.Hand;
+            }
         }
 
         void game_PlayerTurn(object sender, PlayerTurnEventArgs e)
