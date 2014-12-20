@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Frostbite.Engine.Heroes
 {
-    public abstract class Hero
+    public class AverageJoe : Hero
     {
-        public abstract int BaseHealth { get; }
-
+        public override int BaseHealth
+        {
+            get { return 10;  }
+        }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Frostbite.Engine.Cards.Summon;
 using Frostbite.Engine.Gameplay;
+using Frostbite.Engine.Heroes;
 
 namespace Frostbite.GameTestHarness
 {
@@ -16,6 +17,8 @@ namespace Frostbite.GameTestHarness
     {
         private Game _game;
         private int _currentPlayerId;
+        private Player _player1;
+        private Player _player2;
 
         public Form1()
         {
@@ -24,26 +27,61 @@ namespace Frostbite.GameTestHarness
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var player1 = new Player(new List<Card>
+            _player1 = new Player(new List<Card>
             {
                 new DogCard(),
                 new DogCard(),
                 new DogCard(),
                 new DogCard(),
                 new DogCard()
-            });
-            var player2 = new Player(new List<Card>
+            }, new AverageJoe());
+            _player2 = new Player(new List<Card>
             {
                 new DogCard(),
                 new DogCard(),
                 new DogCard(),
                 new DogCard(),
                 new DogCard()
-            });
-            _game = new Game(new List<Player>{player1, player2});
+            }, new AverageJoe());
+
+            player1IdLabel.Text = _player1.Id.ToString();
+            player2IdLabel.Text = _player2.Id.ToString();
+            
+            _game = new Game(new List<Player>{_player1, _player2});
             _game.PlayerTurn += game_PlayerTurn;
             _game.HandChange += GameOnHandChange;
+            _game.UnitChange += GameOnUnitChange;
+            _game.ManaChange += GameOnManaChange;
             _game.Start();
+        }
+
+        private void GameOnManaChange(object sender, ManaChangeEventArgs manaChangeEventArgs)
+        {
+            Label label;
+            if (manaChangeEventArgs.PlayerId == _player1.Id)
+            {
+                label = player1ManaLabel;
+            }
+            else
+            {
+                label = player2ManaLabel;
+            }
+            label.Text = manaChangeEventArgs.ManaLeft + " / " + manaChangeEventArgs.MaxMana;
+        }
+
+        private void GameOnUnitChange(object sender, UnitChangeEventArgs unitChangeEventArgs)
+        {
+            ListBox listBox;
+            if (unitChangeEventArgs.PlayerId == _player1.Id)
+            {
+                listBox = Player1UnitsListBox;
+            }
+            else
+            {
+                listBox = Player2UnitsListBox;
+            }
+            listBox.DataSource = null;
+            listBox.DataSource = unitChangeEventArgs.Units;
         }
 
         private void GameOnHandChange(object sender, HandChangeEventArgs handChangeEventArgs)
@@ -53,26 +91,44 @@ namespace Frostbite.GameTestHarness
                 comboBox1.DataSource = null;
                 comboBox1.DataSource = handChangeEventArgs.Hand;
             }
+
+            ListBox listBox;
+            if (handChangeEventArgs.PlayerId == _player1.Id)
+            {
+                listBox = Player1HandListBox;
+            }
+            else
+            {
+                listBox = Player2HandListBox;
+            }
+            listBox.DataSource = null;
+            listBox.DataSource = handChangeEventArgs.Hand;
         }
 
         void game_PlayerTurn(object sender, PlayerTurnEventArgs e)
         {
-            textBox1.Text = "Player's turn: " + e.PlayerId + Environment.NewLine;
-            textBox1.Text += "Player's hand: " + String.Join(", ", e.Hand) + Environment.NewLine;
-            textBox1.Text += "Player's units: " + String.Join(", ", e.Units) + Environment.NewLine;
             _currentPlayerId = e.PlayerId;
+            curentPlayerIdLabel.Text = _currentPlayerId.ToString();
             comboBox1.DataSource = e.Hand;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             var card = (Card) comboBox1.SelectedItem;
-            _game.PlayCard(_currentPlayerId, card.Id);
+            if (card != null)
+            {
+                _game.PlayCard(_currentPlayerId, card.Id);
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             _game.EndTurn(_currentPlayerId);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

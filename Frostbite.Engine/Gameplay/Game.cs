@@ -14,9 +14,15 @@ namespace Frostbite.Engine.Gameplay
         private readonly List<Player> _players;
 
         public delegate void PlayerTurnEventHandler(object sender, PlayerTurnEventArgs e);
+
         public delegate void HandChangeEventHandler(object sender, HandChangeEventArgs e);
 
+        public delegate void UnitChangeEventHandler(object sender, UnitChangeEventArgs e);
+
+        public delegate void ManaChangeEventHandler(object sender, ManaChangeEventArgs e);
+
         private int _currentPlayerIndex;
+        private int _turn;
 
         public Game(IEnumerable<Player> players)
         {
@@ -24,7 +30,21 @@ namespace Frostbite.Engine.Gameplay
             foreach (var player in _players)
             {
                 player.HandChange += PlayerOnHandChange;
+                player.UnitChange += PlayerOnUnitChange;
+                player.ManaChange += PlayerOnManaChange;
             }
+        }
+
+        private void PlayerOnManaChange(object sender, EventArgs eventArgs)
+        {
+            var player = (Player)sender;
+            OnManaChange(player);
+        }
+
+        private void PlayerOnUnitChange(object sender, EventArgs eventArgs)
+        {
+            var player = (Player) sender;
+            OnUnitChange(player);
         }
 
         private void PlayerOnHandChange(object sender, EventArgs eventArgs)
@@ -35,17 +55,19 @@ namespace Frostbite.Engine.Gameplay
 
         public void Start()
         {
+            _turn = 0;
             _players[0].DrawCards(2);
             _players[1].DrawCards(2);
             _currentPlayerIndex = new Random().Next(2);
-            OnPlayerTurn();
+
+            StartCurrentPlayersTurn();
         }
 
         public void PlayCard(int playerId, int cardId)
         {
             var currentPlayer = GetCurrentPlayer();
 
-            if(currentPlayer.Id != playerId) throw new GameplayException("Not this player's turn");
+            if (currentPlayer.Id != playerId) throw new GameplayException("Not this player's turn");
 
             currentPlayer.PlayCard(cardId);
         }
@@ -58,11 +80,26 @@ namespace Frostbite.Engine.Gameplay
 
             _currentPlayerIndex = (_currentPlayerIndex + 1)%2;
 
+            
+
+            StartCurrentPlayersTurn();
+        }
+
+        private void StartCurrentPlayersTurn()
+        {
+            _turn++;
             OnPlayerTurn();
 
+            Player currentPlayer;
             currentPlayer = GetCurrentPlayer();
             currentPlayer.DrawCards(1);
+            currentPlayer.SetMaxMana(GetMaxManaForThisTurn());
+            currentPlayer.ReplenishMana();
+        }
 
+        private int GetMaxManaForThisTurn()
+        {
+            return ((_turn -1) / 2)+1;
         }
 
         private Player GetCurrentPlayer()
@@ -71,7 +108,7 @@ namespace Frostbite.Engine.Gameplay
         }
 
         public event PlayerTurnEventHandler PlayerTurn;
-        
+
 
         protected virtual void OnPlayerTurn()
         {
@@ -92,18 +129,56 @@ namespace Frostbite.Engine.Gameplay
 
         protected virtual void OnHandChange(Player player)
         {
-            var currentPlayer = GetCurrentPlayer();
-            var e = new HandChangeEventArgs
+            if (HandChange != null)
             {
-                PlayerId = currentPlayer.Id,
-                Hand = currentPlayer.GetHand(),
-            };
-            HandChange(this, e);
+                var e = new HandChangeEventArgs
+                {
+                    PlayerId = player.Id,
+                    Hand = player.GetHand(),
+                };
+                HandChange(this, e);
+            }
+        }
+
+        public event UnitChangeEventHandler UnitChange;
+
+        protected virtual void OnUnitChange(Player player)
+        {
+            if (UnitChange != null)
+            {
+                var e = new UnitChangeEventArgs
+                {
+                    PlayerId = player.Id,
+                    Units = player.GetUnits(),
+                };
+                UnitChange(this, e);
+            }
+        }
+
+        public event ManaChangeEventHandler ManaChange;
+
+        protected virtual void OnManaChange(Player player)
+        {
+            if (ManaChange != null)
+            {
+                var e = new ManaChangeEventArgs
+                {
+                    PlayerId = player.Id,
+                    ManaLeft = player.GetManaLeft(),
+                    MaxMana = player.GetMaxMana(),
+                };
+                ManaChange(this, e);
+            }
         }
     }
-    
 
-    public class PlayerTurnEventArgs:EventArgs
+    public class UnitChangeEventArgs : EventArgs
+    {
+        public int PlayerId { get; set; }
+        public List<Unit> Units { get; set; }
+    }
+
+    public class PlayerTurnEventArgs : EventArgs
     {
         public int PlayerId { get; set; }
         public List<Card> Hand { get; set; }
@@ -114,5 +189,12 @@ namespace Frostbite.Engine.Gameplay
     {
         public int PlayerId { get; set; }
         public List<Card> Hand { get; set; }
+    }
+
+    public class ManaChangeEventArgs : EventArgs
+    {
+        public int PlayerId { get; set; }
+        public int MaxMana { get; set; }
+        public int ManaLeft { get; set; }
     }
 }
