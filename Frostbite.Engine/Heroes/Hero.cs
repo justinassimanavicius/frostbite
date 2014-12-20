@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Frostbite.Engine
+namespace Frostbite.Engine.Heroes
 {
-    public class Class1
+    abstract class Hero
     {
+        public int BaseHealth { get; set; }
+
     }
 }
