@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frostbite.Web", "Frostbite.Web\Frostbite.Web.csproj", "{3C3C46AA-BDE0-4F21-9414-62F3B1383AD3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A9591D2-6889-465F-AD26-87FAE5C47C83} = {6A9591D2-6889-465F-AD26-87FAE5C47C83}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frostbite.Engine", "Frostbite.Engine\Frostbite.Engine.csproj", "{5C563BD4-48EE-471B-ACEE-6FD2F68DFA19}"
 EndProject

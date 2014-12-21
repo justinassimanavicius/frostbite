@@ -5,29 +5,43 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using Frostbite.Lobby;
 
 namespace Frostbite.GameHost
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class GameService : IGameService
     {
-        public string GetData(int value)
+        
+        private readonly SingleSeatLobby _lobby = new SingleSeatLobby();
+
+        public void AddPlayerToLoby(int playerId)
         {
-            return string.Format("You entered: {0}", value);
+            var client = new GameClient(Callback);
+            _lobby.AddWaitingPlayer(playerId, client);
         }
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
+        IGameCallbackService Callback
         {
-            if (composite == null)
+            get
             {
-                throw new ArgumentNullException("composite");
+                return OperationContext.Current.GetCallbackChannel<IGameCallbackService>();
             }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
+        }
+    }
+
+    public class GameClient : IGameClient
+    {
+        private readonly IGameCallbackService _callback;
+
+        public GameClient(IGameCallbackService callback)
+        {
+            _callback = callback;
+        }
+
+        public void StartGame(int gameId)
+        {
+            _callback.StartGame(gameId);
         }
     }
 }

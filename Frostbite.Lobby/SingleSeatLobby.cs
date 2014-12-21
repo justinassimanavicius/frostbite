@@ -7,7 +7,7 @@ using Frostbite.Engine.Gameplay;
 
 namespace Frostbite.Lobby
 {
-    public class Lobby
+    public class SingleSeatLobby
     {
 
         private readonly List<Player> _waitingPlayers = new List<Player>();
@@ -19,7 +19,7 @@ namespace Frostbite.Lobby
         private readonly GameFactory _gameFactory = new GameFactory();
         private readonly PlayerFactory _playerFactory = new PlayerFactory();
 
-        public void AddWaitingPlayer(int playerId)
+        public void AddWaitingPlayer(int playerId, IGameClient client)
         {
             var newPlayer = CreateNewPlayer(playerId);
 
