@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frostbite.GameHost", "Frost
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frostbite.GameTestHarness", "Frostbite.GameTestHarness\Frostbite.GameTestHarness.csproj", "{6DDA48D3-94F2-429B-8A1F-49F58654558B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frostbite.Lobby", "Frostbite.Lobby\Frostbite.Lobby.csproj", "{49920AF7-6499-439B-A4EF-B2612EE137C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{6DDA48D3-94F2-429B-8A1F-49F58654558B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DDA48D3-94F2-429B-8A1F-49F58654558B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DDA48D3-94F2-429B-8A1F-49F58654558B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49920AF7-6499-439B-A4EF-B2612EE137C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49920AF7-6499-439B-A4EF-B2612EE137C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49920AF7-6499-439B-A4EF-B2612EE137C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49920AF7-6499-439B-A4EF-B2612EE137C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

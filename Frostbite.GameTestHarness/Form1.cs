@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Frostbite.Engine.Cards;
+using Frostbite.Engine.Cards.Spell;
 using Frostbite.Engine.Cards.Summon;
 using Frostbite.Engine.Gameplay;
 using Frostbite.Engine.Heroes;

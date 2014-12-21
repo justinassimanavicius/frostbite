@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Frostbite.GameHost
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
-    [ServiceContract]
-    public interface IService1
+    [ServiceContract(SessionMode = SessionMode.Required,
+                 CallbackContract = typeof(IGameCallbackService))]
+    public interface IGameService
     {
 
         [OperationContract]
@@ -20,6 +20,10 @@ namespace Frostbite.GameHost
         CompositeType GetDataUsingDataContract(CompositeType composite);
 
         // TODO: Add your service operations here
+    }
+
+    public interface IGameCallbackService
+    {
     }
 
 

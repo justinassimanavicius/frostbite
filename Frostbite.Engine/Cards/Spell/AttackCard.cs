@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Frostbite.Engine.Commands;
 using Frostbite.Engine.Exceptions;
 using Frostbite.Engine.Gameplay;
-using Frostbite.Engine.Units;
 
-namespace Frostbite.Engine.Cards.Summon
+namespace Frostbite.Engine.Cards.Spell
 {
     public class AttackCard:Card
     {
