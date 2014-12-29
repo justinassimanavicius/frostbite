@@ -15,6 +15,12 @@ namespace Frostbite.GameHost
         
         private readonly SingleSeatLobby _lobby = new SingleSeatLobby();
 
+	    public GameService()
+	    {
+		    _lobby = new SingleSeatLobby();
+			_lobby.
+	    }
+
         public void AddPlayerToLoby(int playerId)
         {
             var client = new GameClient(Callback);
