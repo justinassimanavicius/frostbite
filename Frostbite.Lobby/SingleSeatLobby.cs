@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Frostbite.Engine;
 using Frostbite.Engine.Gameplay;
 
 namespace Frostbite.Lobby
@@ -21,7 +22,7 @@ namespace Frostbite.Lobby
 
         public void AddWaitingPlayer(int playerId, IGameClient client)
         {
-            var newPlayer = CreateNewPlayer(playerId);
+			var newPlayer = CreateNewPlayer(playerId, client);
 
             var opponent = GetOpponent(newPlayer);
 
@@ -53,11 +54,32 @@ namespace Frostbite.Lobby
             {
                 _games.Add(game);
             }
+			OnGameCreated(game);
         }
 
-        private Player CreateNewPlayer(int playerId)
+        private Player CreateNewPlayer(int playerId, IGameClient client)
         {
-            return _playerFactory.CreatePlayer(playerId);
+			return _playerFactory.CreatePlayer(playerId, client);
         }
+
+		public delegate void GameCreatedHandler(object sender, GameCreatedEventArgs e);
+		public event GameCreatedHandler GameCreated;
+
+	    private void OnGameCreated(Game game)
+	    {
+		    if (GameCreated != null)
+		    {
+			    var gameCreatedEventArgs = new GameCreatedEventArgs
+			    {
+				    Game = game
+			    };
+			    GameCreated(this, gameCreatedEventArgs);
+		    }
+	    }
     }
+
+	public class GameCreatedEventArgs
+	{
+		public Game Game { get; set; }
+	}
 }

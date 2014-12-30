@@ -16,10 +16,17 @@ namespace Frostbite.Web.Hubs
             // Call the broadcastMessage method to update clients.
             Clients.All.broadcastMessage(name, message);
         }
+		public void StartGame(dynamic caller, string message)
+		{
+			// Call the broadcastMessage method to update clients.
+			caller.broadcastMessage("GameMaster", message);
+		}
+
 
 		public void Join(int playerId)
 		{
-			var client = new GameServiceClient(new InstanceContext(new GameCallback(this)));
+			var caller = Clients.Caller;
+			var client = new GameServiceClient(new InstanceContext(new GameCallback(this, caller)));
 			client.AddPlayerToLoby(playerId);
 		}
 
@@ -33,14 +40,17 @@ namespace Frostbite.Web.Hubs
 	public class GameCallback : IGameServiceCallback
 	{
 		private readonly GameHub _gameHub;
-		public GameCallback(GameHub gameHub)
+		private readonly dynamic _caller;
+
+		public GameCallback(GameHub gameHub, dynamic caller)
 		{
 			_gameHub = gameHub;
+			_caller = caller;
 		}
 
 		public void StartGame(int gameId)
 		{
-			_gameHub.Send("System", "GameStarted");
+			_gameHub.StartGame(_caller, "GameStarted");
 		}
 	}
 }

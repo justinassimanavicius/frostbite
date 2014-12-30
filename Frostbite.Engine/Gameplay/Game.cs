@@ -14,6 +14,8 @@ namespace Frostbite.Engine.Gameplay
     {
         private readonly List<Player> _players;
 
+		public List<Player> Players { get { return _players; } }
+
         public delegate void PlayerTurnEventHandler(object sender, PlayerTurnEventArgs e);
 
         public delegate void HandChangeEventHandler(object sender, HandChangeEventArgs e);

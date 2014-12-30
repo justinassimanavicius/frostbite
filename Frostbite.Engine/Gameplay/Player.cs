@@ -13,7 +13,8 @@ namespace Frostbite.Engine.Gameplay
 {
     public class Player
     {
-        private readonly Hero _hero;
+	    private readonly IGameClient _client;
+	    private readonly Hero _hero;
 
         public int Id
         {
@@ -24,12 +25,19 @@ namespace Frostbite.Engine.Gameplay
         private List<Card> Hand { get; set; }
         private List<Card> Discards { get; set; }
         private List<Unit> Units { get; set; }
-        private int _manaLeft;
+
+	    public IGameClient Client
+	    {
+		    get { return _client; }
+	    }
+
+	    private int _manaLeft;
         private int _maxMana;
 
-        public Player(IEnumerable<Card> deck, Hero hero)
+        public Player(IGameClient client, IEnumerable<Card> deck, Hero hero)
         {
-            _hero = hero;
+	        _client = client;
+	        _hero = hero;
             Deck = new Stack<Card>(deck);
             Hand = new List<Card>();
             Discards = new List<Card>();

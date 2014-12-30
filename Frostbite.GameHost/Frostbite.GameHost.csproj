@@ -82,6 +82,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Frostbite.Engine\Frostbite.Engine.csproj">
+      <Project>{5C563BD4-48EE-471B-ACEE-6FD2F68DFA19}</Project>
+      <Name>Frostbite.Engine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Frostbite.Lobby\Frostbite.Lobby.csproj">
       <Project>{49920AF7-6499-439B-A4EF-B2612EE137C9}</Project>
       <Name>Frostbite.Lobby</Name>

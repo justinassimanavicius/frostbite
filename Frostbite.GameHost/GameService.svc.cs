@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using Frostbite.Engine;
 using Frostbite.Lobby;
 
 namespace Frostbite.GameHost
@@ -18,10 +19,19 @@ namespace Frostbite.GameHost
 	    public GameService()
 	    {
 		    _lobby = new SingleSeatLobby();
-			_lobby.
+			_lobby.GameCreated +=LobbyOnGameCreated;
 	    }
 
-        public void AddPlayerToLoby(int playerId)
+	    private void LobbyOnGameCreated(object sender, GameCreatedEventArgs e)
+	    {
+			foreach (var player in e.Game.Players)
+		    {
+			    player.Client.StartGame(e.Game.GetHashCode());
+		    }
+		    
+	    }
+
+	    public void AddPlayerToLoby(int playerId)
         {
             var client = new GameClient(Callback);
             _lobby.AddWaitingPlayer(playerId, client);

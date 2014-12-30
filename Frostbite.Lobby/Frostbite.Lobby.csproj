@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameFactory.cs" />
-    <Compile Include="IGameClient.cs" />
     <Compile Include="SingleSeatLobby.cs" />
     <Compile Include="PlayerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

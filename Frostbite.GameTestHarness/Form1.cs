@@ -32,24 +32,24 @@ namespace Frostbite.GameTestHarness
         {
             _player1 = new Player(new List<Card>
             {
-                new DogCard(),
-                new AttackCard(),
-                new DogCard(),
-                new DogCard(),
-                new DogCard(),
-                new DogCard(),
-                new DogCard()
+	            new DogCard(),
+	            new AttackCard(),
+	            new DogCard(),
+	            new DogCard(),
+	            new DogCard(),
+	            new DogCard(),
+	            new DogCard()
             }, new AverageJoe());
             _player2 = new Player(new List<Card>
             {
-                new DogCard(),
-                new DogCard(),
-                new DogCard(),
-                new AttackCard(),
-                new AttackCard(),
-                new AttackCard(),
-                new DogCard(),
-                new DogCard()
+	            new DogCard(),
+	            new DogCard(),
+	            new DogCard(),
+	            new AttackCard(),
+	            new AttackCard(),
+	            new AttackCard(),
+	            new DogCard(),
+	            new DogCard()
             }, new AverageJoe());
 
             player1IdLabel.Text = _player1.Id.ToString();

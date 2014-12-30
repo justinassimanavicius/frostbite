@@ -50,6 +50,7 @@
     <Compile Include="Gameplay\Game.cs" />
     <Compile Include="Heroes\AverageJoe.cs" />
     <Compile Include="Heroes\Hero.cs" />
+    <Compile Include="IGameClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\Dog.cs" />
     <Compile Include="Units\Unit.cs" />
